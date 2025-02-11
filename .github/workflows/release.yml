@@ -1,6 +1,10 @@
 name: Main
 
-on: push
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -10,18 +14,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
+        uses: actions/checkout@v4
       - name: get ver
-        run: |
-          echo "$(cat v2ray.sh | grep ver=)" >> $GITHUB_ENV
-          echo "old=$(git tag | tail -n1)" >> $GITHUB_ENV
-      # - name: test
-      #   if: env.is_sh_ver == env.old 
-      #   run: |
-      #     echo not found new version.
-      #     exit 1
+        run: echo "$(cat v2ray.sh | grep ver=)" >> $GITHUB_ENV
       - name: zip
         run: zip -9vr code.zip . -x .\*
       - name: release
